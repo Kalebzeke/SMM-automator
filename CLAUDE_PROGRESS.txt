@@ -70,3 +70,15 @@
 - Bulk retry/sync remains scoped to today's orders only, ensuring historic rows are not auto-requeued.
 - Validation passed with `npx tsc --noEmit`.
 - No new SQL migration.
+
+2026-08-28
+- Added a full Telegram Channel Management and Publishing system under `/telegram`, reusing the existing Supabase/Next.js/admin-cookie stack (no new framework, no Redis/BullMQ).
+- New tables: telegram_bots, channel_groups, telegram_channels, posts, post_media, post_buttons, post_destinations, post_deliveries, plus a public `telegram-media` storage bucket (`supabase/migrations/0004_telegram_publishing.sql`, mirrored into `supabase/schema.sql`).
+- Delivery queue is DB-backed (post_deliveries.pending_operation/next_attempt_at) and drained both by an immediate after()-triggered worker pass and a new per-minute pg_cron job (`supabase/migrations/0005_telegram_worker_cron.sql`, `/api/cron/telegram-worker`) — same pattern as the existing orders-sync cron.
+- lib/telegram/: bot-api.ts (TelegramBotService), publishing-service.ts, delivery-worker.ts (rate limiting, 429 retry_after handling, exponential backoff, permanent-vs-transient error classification), webhook-service.ts (my_chat_member → channel status sync), formatting.ts (whitelist HTML sanitizer + balanced-tag guarantee for parse_mode HTML), crypto.ts (AES-256-GCM bot token encryption).
+- UI: bot settings, channel connect/search/categories/bulk actions, post composer (formatting toolbar, media upload, inline buttons, channel/category destination picker, live sanitized preview), post detail (edit, publish, retry failed, Update Published Messages, Delete Everywhere, delete from dashboard, duplicate), scheduled posts, post history with status filters, Telegram dashboard stats.
+- Bot tokens are encrypted at rest and never returned to the frontend beyond a last-4-chars preview; channel photos are proxied server-side so the raw Telegram file URL (which embeds the bot token) never reaches the browser; mutating Telegram API routes reuse the existing `panelist_admin` cookie guard (new `lib/auth.ts`); webhook requests are validated against `TELEGRAM_WEBHOOK_SECRET`.
+- Added a minimal vitest setup (none existed) with 42 tests covering HTML sanitization/tag-balancing, token encryption round-trip/tamper detection, Telegram error permanence classification, backoff timing, my_chat_member → channel status mapping, delivery dedup/retry/edit-everywhere/delete-everywhere selection logic (via a small in-memory Supabase test double), and the admin auth guard — no real Telegram calls or live DB required.
+- Added `.env.example` (didn't exist) and `docs/telegram-publishing.md` covering BotFather setup, channel connection, webhook config, running the worker locally, and troubleshooting common Telegram errors.
+- Validated with `npx tsc --noEmit`, `npx eslint .`, `npx vitest run`, and `npx next build` — all clean.
+- MTProto (Phase 2 channel creation) intentionally not implemented, per the task's own instructions; channel storage is agnostic to how a channel's bot was added so it can be layered on later.

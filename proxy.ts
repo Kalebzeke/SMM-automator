@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PROTECTED_PATHS = ["/services", "/comments", "/providers"];
+const PROTECTED_PATHS = ["/services", "/comments", "/providers", "/telegram"];
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -26,5 +26,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/services/:path*", "/comments/:path*", "/providers/:path*"],
+  matcher: ["/services/:path*", "/comments/:path*", "/providers/:path*", "/telegram/:path*"],
 };

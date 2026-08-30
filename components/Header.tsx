@@ -10,6 +10,7 @@ const links = [
   { href: "/services", label: "Services" },
   { href: "/providers", label: "API Providers" },
   { href: "/comments", label: "Comments" },
+  { href: "/telegram", label: "Telegram" },
 ];
 
 export default function Header() {

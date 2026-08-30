@@ -30,6 +30,12 @@ SocPanel) is automatic.
   accidentally get used on a LinkedIn order.
 - **Settings** — SocPanel API key, stored server-side only. Sidebar shows
   your live SocPanel balance.
+- **Telegram** — a separate publishing system for Telegram channels: connect
+  a bot, manage channels/categories, compose one post (text, media, inline
+  buttons), send it to any mix of channels or "All Channels", track
+  per-channel delivery status, retry failures, schedule posts, and edit or
+  delete a published post everywhere it went. See
+  [`docs/telegram-publishing.md`](docs/telegram-publishing.md) for setup.
 
 ## SocPanel API note
 
@@ -112,6 +118,34 @@ Run the next file from `supabase/migrations/` in order (for this repo, start wit
 1. Go to Settings and add SocPanel or another SMM panel API provider.
 2. Go to Services, choose the provider, click "Pull services", search the exact service ID or keyword, then map each tier.
 3. Go to Mass Orders, paste several post links, pick platform and tier, then submit.
+
+## Latest update: Telegram Channel Management and Publishing
+
+This build adds a full Telegram publishing system under `/telegram`:
+
+- Connect a Telegram bot, manage channels and channel categories.
+- Compose a post (text, formatting, one image/video/file, inline URL
+  buttons) and send it to any mix of channels, categories, or all channels.
+- Background delivery queue with per-channel status, automatic retry with
+  backoff, and Telegram flood-control handling.
+- Scheduling, drafts, duplicate post, post history.
+- Edit Everywhere / Delete Everywhere for already-published posts.
+
+### Required database update
+
+Run, in order: `supabase/migrations/0004_telegram_publishing.sql`, then
+`supabase/migrations/0005_telegram_worker_cron.sql`.
+
+### Required environment variables
+
+`TELEGRAM_TOKEN_ENCRYPTION_KEY` and `TELEGRAM_WEBHOOK_SECRET` (see
+`.env.example`).
+
+### How to use
+
+See [`docs/telegram-publishing.md`](docs/telegram-publishing.md) for the
+full walkthrough (BotFather setup, adding the bot to a channel, webhook
+config, running the worker locally, troubleshooting).
 
 ## Logo and favicon
 
