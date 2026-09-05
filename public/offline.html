@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline — Panelist</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #050814;
+        color: #f7f8ff;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      .card {
+        max-width: 360px;
+        padding: 28px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 16px;
+        background: rgba(15, 19, 35, 0.82);
+        text-align: center;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 8px;
+      }
+      p {
+        font-size: 14px;
+        color: #9aa3c7;
+        margin: 0 0 18px;
+        line-height: 1.5;
+      }
+      button {
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+        color: #f7f8ff;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>You're offline</h1>
+      <p>
+        Panelist needs a connection to load live order and channel data.
+        Reconnect and try again.
+      </p>
+      <button onclick="location.reload()">Retry</button>
+    </div>
+  </body>
+</html>

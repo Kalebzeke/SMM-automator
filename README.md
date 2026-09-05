@@ -152,3 +152,23 @@ config, running the worker locally, troubleshooting).
 The header logo loads from `public/logo.svg`. Replace that file with your own SVG using the same filename and the top bar will update automatically.
 
 The browser icon loads from `public/favicon.svg`, and `app/icon.svg` is also included for Next.js app icon support. Replace both if you want the browser tab icon to match your brand.
+
+## Installing as a local app (PWA)
+
+Panelist already ships a web app manifest (`public/manifest.json`) and now a
+service worker (`public/sw.js`) for offline app-shell caching and home
+screen/desktop installability. To try it locally:
+
+```
+npm run build
+npm run start
+```
+
+Open http://localhost:3000, and your browser should offer to install it (in
+Chrome/Edge, the install icon appears in the address bar; on mobile, use
+"Add to Home Screen"). It won't offer to install during `npm run dev` —
+the service worker only registers in production builds, since it otherwise
+fights Turbopack's fast refresh. `/api/*` requests are never cached, so
+order/channel/post data is always live; only the app shell and static
+assets work offline (with a small offline fallback page if the network
+drops mid-navigation).

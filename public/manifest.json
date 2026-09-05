@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Panelist",
   "short_name": "Panelist",
-  "description": "SMM automation panel for managing orders, services, providers, and comment pools.",
+  "description": "SMM automation panel for managing orders, services, providers, comment pools, and Telegram publishing.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
