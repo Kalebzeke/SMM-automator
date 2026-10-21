@@ -33,7 +33,7 @@ never changes, so it's always the source of truth.
 | Variable | Purpose |
 |---|---|
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Already required by the rest of the app. |
-| `ADMIN_PANEL_PASSWORD` | Already required — also gates the `/telegram` pages and mutating Telegram API routes. |
+| `ADMIN_PANEL_PASSWORD` | Already required — gates the `/telegram` pages and Telegram dashboard APIs. The webhook uses `TELEGRAM_WEBHOOK_SECRET` instead so Telegram can call it. |
 | `CRON_SECRET` | Already required — also authorizes `/api/cron/telegram-worker`. |
 | `TELEGRAM_TOKEN_ENCRYPTION_KEY` | 32 random bytes, base64-encoded. Generate with `openssl rand -base64 32`. Encrypts bot tokens at rest (AES-256-GCM). Losing/rotating this key invalidates every stored bot token — you'd need to reconnect the bot. |
 | `TELEGRAM_WEBHOOK_SECRET` | Any random string. Telegram echoes it back in the `X-Telegram-Bot-Api-Secret-Token` header on every webhook call; requests without a match are rejected. |

@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAdminRequest, unauthorizedResponse } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { getActiveBotToken, getChat, getFileDownloadUrl } from "@/lib/telegram/bot-api";
 
 // Proxies a channel's profile photo through the server so the raw Telegram
 // file URL — which embeds the full bot token — is never sent to the browser.
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!isAdminRequest(req)) return unauthorizedResponse();
+
   const { id } = await params;
   const supabase = supabaseAdmin();
 

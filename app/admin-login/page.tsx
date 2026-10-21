@@ -68,7 +68,7 @@ function AdminLoginForm() {
         </h1>
 
         <p className="text-sm text-[#9aa3c7]">
-          This area is protected for provider, service, and comment settings.
+          This area is protected for provider, service, comment, and Telegram settings.
         </p>
       </div>
 
