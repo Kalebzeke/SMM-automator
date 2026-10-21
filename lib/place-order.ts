@@ -37,6 +37,18 @@ function isInstagramReel(link: string) {
   }
 }
 
+export function isXBroadcastLink(link: string) {
+  try {
+    const url = new URL(link);
+    const hostname = url.hostname.toLowerCase();
+    const isXHost = ["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(hostname);
+
+    return isXHost && /^\/i\/broadcasts\/[^/]+\/?$/.test(url.pathname);
+  } catch {
+    return false;
+  }
+}
+
 async function popComments(poolId: string, count: number): Promise<string[]> {
   const supabase = supabaseAdmin();
   const { data, error } = await supabase
@@ -593,8 +605,14 @@ export async function submitOrderForLink(params: {
 
   const instagramShouldOrderViews =
     params.platform !== "instagram" || isInstagramReel(params.link);
+  const broadcastLink =
+    params.platform === "x" && isXBroadcastLink(params.link);
 
   const filteredPresets = presets.filter((preset) => {
+    if (broadcastLink) {
+      return normalizeServiceCategory(String(preset.service_type)) === "broadcast";
+    }
+
     if (
       params.platform === "instagram" &&
       preset.service_type === "views" &&
@@ -608,7 +626,9 @@ export async function submitOrderForLink(params: {
 
   if (filteredPresets.length === 0) {
     throw new Error(
-      `No eligible service presets found for this ${params.platform} link.`
+      broadcastLink
+        ? "No enabled broadcast service preset found for this X broadcast link. Configure broadcast in Services first."
+        : `No eligible service presets found for this ${params.platform} link.`
     );
   }
 
