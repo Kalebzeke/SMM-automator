@@ -45,7 +45,7 @@ type DraftPreset = {
 };
 
 const DEFAULT_SERVICE_TYPES: Record<string, string[]> = {
-  x: ["views", "likes", "retweets", "comments"],
+  x: ["views", "likes", "retweets", "comments", "broadcast"],
   instagram: ["views", "likes", "comments", "shares"],
   tiktok: ["views", "likes", "comments", "shares"],
   linkedin: ["likes", "comments", "shares"],

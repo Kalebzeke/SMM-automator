@@ -21,9 +21,9 @@ SocPanel) is automatic.
   cards (total/submitted/pending/failed), and a running feed of every order
   with per-service success/error status.
 - **Services** — pull your live service catalog from SocPanel, map each
-  service type (views/likes/retweets/comments/shares) to a real SocPanel
-  service ID, per platform and per tier (Priority / Regular), with editable
-  quantities.
+  service type (including X views/likes/retweets/comments/broadcast and
+  other platform-specific services) to a real SocPanel service ID, with
+  editable quantities and sequential slots.
 - **Comment Pools** — upload a CSV of comments per platform. Any order that
   includes a "comments" service pulls a fresh, never-reused comment from the
   pool you assign — and the platform is enforced, so an X pool can't
@@ -74,7 +74,7 @@ API key (this lives in Supabase, not in `.env`).
 Go to **Services**, click "Pull services from SocPanel", then for each
 platform/tier, map each service type to the right SocPanel service ID and
 set your quantities (e.g. X / Priority: Views 30000, Likes 25, Retweets 25,
-Comments 20).
+Comments 20, Broadcast 1).
 
 ### 5. Upload comment pools (optional)
 
