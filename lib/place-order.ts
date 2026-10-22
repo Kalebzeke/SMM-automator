@@ -1,7 +1,14 @@
 import { supabaseAdmin } from "./supabase";
 import { placePanelOrder } from "./smm-panel";
 
-type Platform = "x" | "instagram" | "tiktok" | "linkedin" | "youtube";
+type Platform =
+  | "x"
+  | "instagram"
+  | "tiktok"
+  | "linkedin"
+  | "youtube"
+  | "kick"
+  | "twitch";
 
 type ServiceResult = {
   service_type: string;

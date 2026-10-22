@@ -1,6 +1,6 @@
 # Panelist — SMM Order Automator
 
-Paste a post link from X, Instagram, TikTok, or LinkedIn, pick a tier, and
+Paste a post link from X, Instagram, TikTok, LinkedIn, Kick, or Twitch, pick a tier, and
 it fires the right SocPanel orders automatically.
 
 ## Why every platform is manual paste, including X
@@ -11,7 +11,7 @@ even with a human clicking "submit" on each one. Declaring a different,
 softer use case on the developer application doesn't avoid this: it's a
 separate violation (misrepresentation), and enforcement is based on what the
 token actually does, not what the form says. So this tool never touches the
-X API — you paste the link yourself, same as the other three platforms, and
+X API — you paste the link yourself, same as the other supported platforms, and
 everything downstream (service lookup, quantities, comments, submission to
 SocPanel) is automatic.
 
@@ -21,8 +21,8 @@ SocPanel) is automatic.
   cards (total/submitted/pending/failed), and a running feed of every order
   with per-service success/error status.
 - **Services** — pull your live service catalog from SocPanel, map each
-  service type (including X views/likes/retweets/comments/broadcast and
-  other platform-specific services) to a real SocPanel service ID, with
+  service type (including X views/likes/retweets/comments/broadcast, plus
+  Kick/Twitch plays and other platform-specific services) to a real SocPanel service ID, with
   editable quantities and sequential slots.
 - **Comment Pools** — upload a CSV of comments per platform. Any order that
   includes a "comments" service pulls a fresh, never-reused comment from the

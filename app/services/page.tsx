@@ -50,6 +50,8 @@ const DEFAULT_SERVICE_TYPES: Record<string, string[]> = {
   tiktok: ["views", "likes", "comments", "shares"],
   linkedin: ["likes", "comments", "shares"],
   youtube: ["views", "likes", "comments", "subscribers"],
+  kick: ["plays"],
+  twitch: ["plays"],
 };
 
 function makeRowKey(serviceType: string, slotIndex: number) {

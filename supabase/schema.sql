@@ -81,7 +81,7 @@ where id = 1
 
 -- Platforms this tool supports.
 do $$ begin
-  create type platform_t as enum ('x', 'instagram', 'tiktok', 'linkedin', 'youtube');
+  create type platform_t as enum ('x', 'instagram', 'tiktok', 'linkedin', 'youtube', 'kick', 'twitch');
 exception when duplicate_object then null;
 end $$;
 

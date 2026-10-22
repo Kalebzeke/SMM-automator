@@ -3,7 +3,14 @@ import { retryOrderForId, submitOrderForLink } from "@/lib/place-order";
 import { parseOrderLinks } from "@/lib/order-links";
 import { fetchOrderStatus } from "@/lib/smm-panel";
 
-type Platform = "x" | "instagram" | "tiktok" | "linkedin" | "youtube";
+type Platform =
+  | "x"
+  | "instagram"
+  | "tiktok"
+  | "linkedin"
+  | "youtube"
+  | "kick"
+  | "twitch";
 
 type ServiceEntry = {
   service_type?: string;
@@ -161,6 +168,14 @@ function detectPlatformFromLink(link: string): Platform | null {
       return "youtube";
     }
 
+    if (host === "kick.com" || host.endsWith(".kick.com")) {
+      return "kick";
+    }
+
+    if (host === "twitch.tv" || host.endsWith(".twitch.tv")) {
+      return "twitch";
+    }
+
     return null;
   } catch {
     if (cleanLink.includes("x.com/") || cleanLink.includes("twitter.com/")) {
@@ -184,6 +199,14 @@ function detectPlatformFromLink(link: string): Platform | null {
       cleanLink.includes("youtu.be/")
     ) {
       return "youtube";
+    }
+
+    if (cleanLink.includes("kick.com/")) {
+      return "kick";
+    }
+
+    if (cleanLink.includes("twitch.tv/")) {
+      return "twitch";
     }
 
     return null;
