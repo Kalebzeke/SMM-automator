@@ -147,6 +147,22 @@ function normalizeServiceCategory(serviceType: string): string {
   return normalized;
 }
 
+export function shouldOrderServiceTypeForLink(params: {
+  platform: Platform;
+  link: string;
+  serviceType: string;
+}) {
+  if (params.platform !== "x") {
+    return true;
+  }
+
+  const isBroadcastService =
+    normalizeServiceCategory(params.serviceType) === "broadcast";
+  const isBroadcastLink = isXBroadcastLink(params.link);
+
+  return isBroadcastLink === isBroadcastService;
+}
+
 function shouldSubmitComments(params: { platform: Platform; tier: string }) {
   return Boolean(params.platform);
 }
@@ -577,8 +593,10 @@ export async function submitOrderForLink(params: {
   fallbackDefaultsByType?: Record<string, FallbackDefaults>;
 }) {
   const supabase = supabaseAdmin();
+  const broadcastLink =
+    params.platform === "x" && isXBroadcastLink(params.link);
 
-  if (params.commentPoolId) {
+  if (params.commentPoolId && !broadcastLink) {
     const { data: pool, error: poolCheckErr } = await supabase
       .from("comment_pools")
       .select("id, platform")
@@ -605,6 +623,10 @@ export async function submitOrderForLink(params: {
   if (presetErr) throw presetErr;
 
   if (!presets || presets.length === 0) {
+    if (broadcastLink) {
+      return { orderId: null, link: params.link, results: [], hasError: false };
+    }
+
     throw new Error(
       `No enabled service presets found for ${params.platform}. Configure them in Services first.`
     );
@@ -612,12 +634,16 @@ export async function submitOrderForLink(params: {
 
   const instagramShouldOrderViews =
     params.platform !== "instagram" || isInstagramReel(params.link);
-  const broadcastLink =
-    params.platform === "x" && isXBroadcastLink(params.link);
 
   const filteredPresets = presets.filter((preset) => {
-    if (broadcastLink) {
-      return normalizeServiceCategory(String(preset.service_type)) === "broadcast";
+    if (
+      !shouldOrderServiceTypeForLink({
+        platform: params.platform,
+        link: params.link,
+        serviceType: String(preset.service_type),
+      })
+    ) {
+      return false;
     }
 
     if (
@@ -632,10 +658,12 @@ export async function submitOrderForLink(params: {
   });
 
   if (filteredPresets.length === 0) {
+    if (params.platform === "x") {
+      return { orderId: null, link: params.link, results: [], hasError: false };
+    }
+
     throw new Error(
-      broadcastLink
-        ? "No enabled broadcast service preset found for this X broadcast link. Configure broadcast in Services first."
-        : `No eligible service presets found for this ${params.platform} link.`
+      `No eligible service presets found for this ${params.platform} link.`
     );
   }
 

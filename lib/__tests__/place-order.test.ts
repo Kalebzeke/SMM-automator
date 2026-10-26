@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isXBroadcastLink } from "../place-order";
+import { isXBroadcastLink, shouldOrderServiceTypeForLink } from "../place-order";
 
 describe("isXBroadcastLink", () => {
   it("recognizes X broadcast links", () => {
@@ -16,5 +16,15 @@ describe("isXBroadcastLink", () => {
     expect(isXBroadcastLink("https://x.com/i/broadcasts/")).toBe(false);
     expect(isXBroadcastLink("https://not-x.com/i/broadcasts/abc123")).toBe(false);
     expect(isXBroadcastLink("not a url")).toBe(false);
+  });
+
+  it("only allows broadcast services for exact X broadcast links", () => {
+    const broadcastLink = "https://x.com/i/broadcasts/1AKEmvrlpkaKL";
+    const postLink = "https://x.com/example/status/123";
+
+    expect(shouldOrderServiceTypeForLink({ platform: "x", link: broadcastLink, serviceType: "broadcast" })).toBe(true);
+    expect(shouldOrderServiceTypeForLink({ platform: "x", link: broadcastLink, serviceType: "views" })).toBe(false);
+    expect(shouldOrderServiceTypeForLink({ platform: "x", link: postLink, serviceType: "broadcast" })).toBe(false);
+    expect(shouldOrderServiceTypeForLink({ platform: "x", link: postLink, serviceType: "views" })).toBe(true);
   });
 });
